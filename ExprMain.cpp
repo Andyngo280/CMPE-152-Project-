@@ -43,8 +43,8 @@ int main(int argc, const char *args[])
     tree::ParseTree *tree = parser.program();
 
     // Print the parse tree in Lisp format.
-    /*cout << endl << "Parse tree (Lisp format):" << endl;
-    std::cout << tree->toStringTree(&parser) << endl;*/
+    cout << endl << "Parse tree (Lisp format):" << endl;
+    std::cout << tree->toStringTree(&parser) << endl;
 
     SymbVisitor *visitor = new SymbVisitor;
     visitor->visit(tree);
