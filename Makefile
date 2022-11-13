@@ -15,7 +15,7 @@ SOURCES=$(ANLTR_SOURCES) $(PROG)
 compile:
 	g++ -o prog.out -I$(ANTLR_RUNTIME_INCLUDES) -I$(ANTLR_INCLUDES) -I$(PROJECTPATH) -L/usr/local/lib -w \
 target/generated-sources/ant4/*.cpp ExprMain.cpp -lantlr4-runtime
-	./prog.out test-in.expr 
+	./prog.out test-in.expr << test-out.asm
 
 antlr:
 	antlr4 -o ./target/generated-sources/ant4 -no-listener -visitor -encoding UTF-8 -Dlanguage=Cpp Expr.g4 
