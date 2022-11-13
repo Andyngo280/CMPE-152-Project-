@@ -6,6 +6,8 @@
 
 #include "antlr4-runtime.h"
 #include "ExprBaseVisitor.h"
+#include <iostream>
+#include <string>
 
 
 /**
@@ -16,12 +18,20 @@ class  codeVisitor : public ExprBaseVisitor
 {
 private:
   int labels = 0;
+  int size = 0;
+  struct values{
+  
+    string val;
+    //will declare these to store values
+    //for arithmetic, use stoi() to convert strings to integer
+  };
+
 public:
 
   virtual antlrcpp::Any visitProgram(ExprParser::ProgramContext *ctx) override 
   {
     labels = 1;
-    cout << "stack \t\t RESB \t 1000" << endl;
+    cout << "stack \t\t RESB \t 10000" << endl;
     cout << "stackindex \t WORD \t 0" << endl;
     cout << "stackmax \t WORD \t 10000" << endl;
     cout << "returnvalue \t RESB \t 500" << endl;
@@ -35,6 +45,7 @@ public:
   }
 
   virtual antlrcpp::Any visitDeclarations(ExprParser::DeclarationsContext *ctx) override {
+
     return visitChildren(ctx);
   }
 
@@ -103,6 +114,12 @@ public:
   }
 
   virtual antlrcpp::Any visitVariables(ExprParser::VariablesContext *ctx) override {
+
+       //do not know how to declare variables yet
+       //   need to know how to access them later on
+       //   will change 'return visitChild...'
+       //   will manually visit variable identifier list
+       //   after, declare a stack frame/increment stack index by size amount
     return visitChildren(ctx);
   }
 
@@ -119,10 +136,17 @@ public:
   }
 
   virtual antlrcpp::Any visitVar_identifier(ExprParser::Var_identifierContext *ctx) override {
+
+    //cout << ctx->entry->name << endl;
+    
+    //check each entry type
+    //  depending on type, we increment size by an amount
     return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitFunctions(ExprParser::FunctionsContext *ctx) override {
+
+    //will do later
     return visitChildren(ctx);
   }
 
@@ -175,6 +199,9 @@ public:
   }
 
   virtual antlrcpp::Any visitAssign_statement(ExprParser::Assign_statementContext *ctx) override {
+
+    //values x = visitExpression(ctx->expression());
+    //cout << x.val << endl;
     return visitChildren(ctx);
   }
 
@@ -204,6 +231,7 @@ public:
 
   virtual antlrcpp::Any visitExpression(ExprParser::ExpressionContext *ctx) override 
   {
+    /*
     int size = ctx->simple_expression().size();
     int type;
     for(int i = 0; i < size; i++)
@@ -212,14 +240,19 @@ public:
     }
 
     cout << type << endl;
-
+    
     return type;
-
-    //return visitChildren(ctx);
+    */
+    return visitChildren(ctx);
+    
+    /*values v;
+    v.val = "100";
+    return v;*/
   }
 
   virtual antlrcpp::Any visitSimple_expression(ExprParser::Simple_expressionContext *ctx) override 
   {
+      /*
     int size = ctx->term().size();
     int x;
     for(int i = 0; i < size; i++)
@@ -227,23 +260,25 @@ public:
       x = visitTerm(ctx->term(i));
     }
     return x;
-
-    //return visitChildren(ctx);
+    */
+    return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitTerm(ExprParser::TermContext *ctx) override 
-  {
+  {/*
     int size = ctx->factor().size();
     int x;
     for(int i = 0; i < size; i++)
     {
       x = visitFactor(ctx->factor(i));
     }
-    return x;
+    */
+    return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitFactor(ExprParser::FactorContext *ctx) override 
   {
+      /*
     int type = 0;
     if(ctx->variable() != nullptr) type = visitVariable(ctx->variable());
     else if(ctx->INTEGER() != nullptr) type = 1;
@@ -251,14 +286,14 @@ public:
     else if(ctx->TRUE() != nullptr) type = 3;
     else if(ctx->FALSE() != nullptr) type = 3;
     else if(ctx->expression() != nullptr) type = visitExpression(ctx->expression());
-
-    return type;
+    */
+    return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitVariable(ExprParser::VariableContext *ctx) override 
   {
-    //return visitChildren(ctx);
-    return 1;
+    return visitChildren(ctx);
+    //return 1;
   }
 
   virtual antlrcpp::Any visitArray_element(ExprParser::Array_elementContext *ctx) override {
