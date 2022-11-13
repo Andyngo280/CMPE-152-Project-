@@ -601,7 +601,9 @@ public:
           symbEntry* t = stack.getEntry(type);
           if(t->type != nullptr) 
           {
-            //if(t->type->getKind)
+            if(t->type->getKind() == "integer") return 1;
+            else if(t->type->getKind() == "char") return 2;
+            else if(t->type->getKind() == "boolean") return 3;
           }
         }
       }
