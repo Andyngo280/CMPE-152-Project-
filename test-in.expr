@@ -1,0 +1,19 @@
+program Test;
+const
+	great = 30;
+	quantity = 20;
+type
+	arr = array [20] of array [30] of integer;
+	time = boolean;
+var
+	alpha, beta, gamma, omega : integer;
+	over: time;
+
+begin
+
+	beta := 10;
+	gamma := 3;
+    	alpha := 1 + beta * gamma;
+    	omega := 12 - alpha/(gamma+3) + 5;
+	over := true;
+end.
