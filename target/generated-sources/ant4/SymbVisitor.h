@@ -304,6 +304,11 @@ public:
 
     symbEntry* t = stack.getEntry(spec->getKind());
 
+    if ((t != nullptr) && (t->type->getKind() == "ARRAY"))
+    {
+        node->extras.array = t->type;
+    }
+
     ctx->entry = node;
 
     stack.getLocal()->addEntry(ctx->IDENTIFIER()->getText(), node);
@@ -599,7 +604,7 @@ public:
         else if(stack.checkStack(type))
         {
           symbEntry* t = stack.getEntry(type);
-          if(t->type != nullptr) 
+          if((t->type != nullptr) && (t->type->getKind() != "ARRAY"))
           {
             if(t->type->getKind() == "integer") return 1;
             else if(t->type->getKind() == "char") return 2;
@@ -630,6 +635,8 @@ public:
     {
       symbEntry *node = stack.getEntry(ctx->IDENTIFIER()->getText());
       string type = node->type->getElemType();
+      node = stack.getEntry(type);
+      type = node->type->getElemType();
       if(type == "integer") return 1;
       else if(type == "char") return 2;
       else if(type == "boolean") return 3;

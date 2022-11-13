@@ -11,6 +11,12 @@ using namespace std;
 
 class symbEntry
 {
+    private:
+        struct helpful
+        {
+            typeSpec* array;
+            vector<symbEntry*> funct_param;
+        };
     public:
         symbEntry()
         {
@@ -23,11 +29,7 @@ class symbEntry
         string kind;
         typeSpec *type;
         int nlvl;
-        union helpful
-        {
-            symbEntry *array;
-            vector<symbEntry*> funct_param;
-        };
+        helpful extras;
 };
 
 #endif
