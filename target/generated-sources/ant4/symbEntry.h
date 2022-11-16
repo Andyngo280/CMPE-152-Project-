@@ -27,6 +27,7 @@ class symbEntry
         }
         string name;
         string kind;
+        string value;
         typeSpec *type;
         int nlvl;
         helpful extras;

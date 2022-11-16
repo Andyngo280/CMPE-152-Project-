@@ -17,12 +17,6 @@ using namespace std;
  * extended to create a visitor which only needs to handle a subset of the available methods.
  */
 
-struct type_check 
-{
-  string statement;
-  string type;
-};
-
 class  SymbVisitor : public ExprBaseVisitor {
 public:
 
@@ -100,26 +94,32 @@ public:
       if(ctx->CHAR() != nullptr)
       {
         type->setKind("char");
+        node->value = ctx->CHAR()->getText();
       }
       else if(ctx->STRINGS() != nullptr)
       {
         type->setKind("string");
+        node->value = ctx->STRINGS()->getText();
       }
       else if(ctx->INTEGER() != nullptr)
       {
         type->setKind("integer");
+        node->value = ctx->INTEGER()->getText();
       }
       else if(ctx->REAL() != nullptr)
       {
         type->setKind("real");
+        node->value = ctx->REAL()->getText();
       }
       else if(ctx->BOOLEAN() != nullptr)
       {
         type->setKind("boolean");
+        node->value = ctx->BOOLEAN()->getText();
       }
       else if(ctx->IDENTIFIER() != nullptr)
       {
         type->setKind(ctx->IDENTIFIER()->getText());
+        node->value = ctx->IDENTIFIER()->getText();
       }
       node->type = type;
 
@@ -208,9 +208,13 @@ public:
   {
     typeSpec *newType = new typeSpec;
     newType->setKind("ARRAY");
-    newType->setIndex(visitArray_start(ctx->array_start()));
+    typeSpec* buff = visitArray_start(ctx->array_start());
+    newType->setIndex(buff);
     newType->setElement(visitType_specification(ctx->type_specification()));
-    newType->setAmount(stoi(ctx->array_start()->dimensions()->simpletype()->scalar()->INTEGER()->getText()));
+    newType->setMax(buff->getMax());
+    newType->setMin(buff->getMin());
+    //newType->setAmount(stoi(ctx->array_start()->dimensions()->simpletype()->scalar()->INTEGER()->getText()));
+    newType->setAmount(buff->getMax() - buff->getMin());
 
     //newType->printType();
 
@@ -225,21 +229,32 @@ public:
   virtual antlrcpp::Any visitDimensions(ExprParser::DimensionsContext *ctx) override 
   {
       typeSpec *newType = new typeSpec;
-      if(ctx->simpletype()->scalar()->CHAR() != nullptr)
+      if (ctx->simpletype()->scalar() != nullptr)
       {
-        newType->setKind("char");
+          ExprParser::ScalarContext* stx = ctx->simpletype()->scalar();
+          if (stx->CHAR() != nullptr)
+          {
+              newType->setKind("char");
+          }
+          else if (stx->INTEGER() != nullptr)
+          {
+              newType->setKind("integer");
+          }
+          else if (stx->BOOLEAN() != nullptr)
+          {
+              newType->setKind("boolean");
+          }
+          else if (stx->IDENTIFIER() != nullptr)
+          {
+              newType->setKind(stx->IDENTIFIER()->getText());
+          }
       }
-      else if(ctx->simpletype()->scalar()->INTEGER() != nullptr)
+      else // range
       {
-        newType->setKind("integer");
-      }
-      else if(ctx->simpletype()->scalar()->BOOLEAN() != nullptr)
-      {
-        newType->setKind("boolean");
-      }
-      else if(ctx->simpletype()->scalar()->IDENTIFIER() != nullptr)
-      {
-        newType->setKind(ctx->simpletype()->scalar()->IDENTIFIER()->getText());
+          ExprParser::RangeContext* rtx = ctx->simpletype()->range();
+          newType->setMin(stoi(rtx->INTEGER(0)->getText()));
+          newType->setMax(stoi(rtx->INTEGER(1)->getText()));
+          newType->setKind("integer");
       }
 
       return newType;

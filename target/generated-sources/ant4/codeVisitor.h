@@ -8,12 +8,32 @@
 #include "ExprBaseVisitor.h"
 #include <iostream>
 #include <string>
+#include <map>
+#include <vector>
 
 
 /**
  * This class provides an empty implementation of ExprVisitor, which can be
  * extended to create a visitor which only needs to handle a subset of the available methods.
  */
+
+/* for many purposes like returning a constant and its value for the optimizations
+*  or to hold the variable name and its index
+*/
+
+struct node
+{
+    string name;
+    string value;
+};
+
+/* Will act like a mini runtime stack frame holding the index of each variable
+*/
+
+vector<map<string, node>> rtStack; 
+//exampe: map<string, node> runtime will hold the variables
+
+
 class  codeVisitor : public ExprBaseVisitor 
 {
 private:

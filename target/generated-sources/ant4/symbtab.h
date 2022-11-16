@@ -48,6 +48,8 @@ class symbtab
                 {
                     cout << "Type: ";
                     x.second->type->printType();
+                    if (x.second->kind == "CONST")
+                        cout << "Value: " << x.second->value << endl;
                 }
                 cout << endl;
             }

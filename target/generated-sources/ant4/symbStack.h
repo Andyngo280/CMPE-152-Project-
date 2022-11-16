@@ -27,7 +27,7 @@ class symbStack
 
             symbEntry *entry = new symbEntry;
             entry->name = "integer";
-            entry->kind = "CONST";
+            entry->kind = "PREDEF_CONST";
             entry->type = nullptr;
             entry->nlvl = 0;
             current_table->addEntry("integer", entry);
@@ -36,7 +36,7 @@ class symbStack
 
             entry = new symbEntry;
             entry->name = "real";
-            entry->kind = "CONST";
+            entry->kind = "PREDEF_CONST";
             entry->type = nullptr;
             entry->nlvl = 0;
             current_table->addEntry("real", entry);
@@ -45,7 +45,7 @@ class symbStack
 
             entry = new symbEntry;
             entry->name = "boolean";
-            entry->kind = "CONST";
+            entry->kind = "PREDEF_CONST";
             entry->type = nullptr;
             entry->nlvl = 0;
             current_table->addEntry("boolean", entry);
@@ -54,7 +54,7 @@ class symbStack
 
             entry = new symbEntry;
             entry->name = "char";
-            entry->kind = "CONST";
+            entry->kind = "PREDEF_CONST";
             entry->type = nullptr;
             entry->nlvl = 0;
             current_table->addEntry("char", entry);
