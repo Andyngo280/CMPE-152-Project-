@@ -6,6 +6,7 @@
 
 #include "antlr4-runtime.h"
 #include "symbEntry.h"
+#include "symbtab.h"
 
 
 
@@ -969,7 +970,7 @@ public:
     Arg_listContext *arg_list();
 
     symbEntry *entry;
-
+    symbtab* table;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

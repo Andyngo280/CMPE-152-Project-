@@ -6,6 +6,7 @@
 
 #include "antlr4-runtime.h"
 #include "ExprBaseVisitor.h"
+#include "typeSpec.h"
 #include <iostream>
 #include <string>
 #include <map>
@@ -30,8 +31,8 @@ struct node
 /* Will act like a mini runtime stack frame holding the index of each variable
 */
 
-vector<map<string, node>> rtStack; 
-//exampe: map<string, node> runtime will hold the variables
+vector<node> rtFrame; 
+//example: map<string, node> runtime can hold the variables
 
 
 class  codeVisitor : public ExprBaseVisitor 
@@ -133,14 +134,17 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVariables(ExprParser::VariablesContext *ctx) override {
-
-       //do not know how to declare variables yet
+  virtual antlrcpp::Any visitVariables(ExprParser::VariablesContext *ctx) override 
+  {
+       //   do not know how to declare variables yet
        //   need to know how to access them later on
        //   will change 'return visitChild...'
        //   will manually visit variable identifier list
        //   after, declare a stack frame/increment stack index by size amount
-    return visitChildren(ctx);
+
+      visitChildren(ctx);
+
+    return 0;
   }
 
   virtual antlrcpp::Any visitVariable_list(ExprParser::Variable_listContext *ctx) override {
@@ -155,12 +159,55 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVar_identifier(ExprParser::Var_identifierContext *ctx) override {
+  virtual antlrcpp::Any visitVar_identifier(ExprParser::Var_identifierContext *ctx) override 
+  {
 
     //cout << ctx->entry->name << endl;
     
-    //check each entry type
+    //  check each entry type
     //  depending on type, we increment size by an amount
+    //  we also create a node to hold the name and size value
+    //  then we add the struct to the vector called rtFrame;
+
+      int x = 1;
+
+      if (ctx->entry->type->getKind() == "integer")
+      {
+          //increment size by integer amount of bytes
+      }
+      else if (ctx->entry->type->getKind() == "char")
+      {
+          //increment size by char amount amount of bytes
+      }
+      else if (ctx->entry->type->getKind() == "boolean")
+      {
+          //increment size by boolean amount of bytes
+      }
+      else //an array check its typeSpec via extras member function of symbEntry
+      {
+          typeSpec* spec = ctx->entry->type;
+          while (spec != nullptr)
+          {
+              if (spec->getElemType() == "integer")
+              {
+                  //multiply x by integer amount of bytes
+              }
+              else if (spec->getElemType() == "char")
+              {
+                  //multiply x by char amount amount of bytes
+              }
+              else if (spec->getElemType() == "boolean")
+              {
+                  //multiply x by boolean amount of bytes
+              }
+              else
+              {
+                  x *= spec->getAmt();
+              }
+
+              spec = spec->getType();
+          }
+      }
     return visitChildren(ctx);
   }
 

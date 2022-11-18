@@ -21,7 +21,15 @@ class typeSpec
         };
         array info;
     public:
-        typeSpec(){}
+        typeSpec()
+        {
+            kind = "";
+            info.indexType = nullptr;
+            info.elementType = nullptr;
+            info.max = 0;
+            info.min = 0;
+            info.amount = 0;
+        }
         void setKind(string n){kind = n;}
         string getKind(){return kind;}
         typeSpec* getIndex(){return info.indexType;}
@@ -39,6 +47,7 @@ class typeSpec
         }
         int getMax() {return info.max;}
         int getMin() {return info.min;}
+        int getAmt() { return info.amount; }
         void setElement(typeSpec *element_type)
         {
             info.elementType = element_type;

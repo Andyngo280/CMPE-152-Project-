@@ -214,7 +214,7 @@ public:
     newType->setMax(buff->getMax());
     newType->setMin(buff->getMin());
     //newType->setAmount(stoi(ctx->array_start()->dimensions()->simpletype()->scalar()->INTEGER()->getText()));
-    newType->setAmount(buff->getMax() - buff->getMin());
+    newType->setAmount(buff->getMax() - buff->getMin() + 1);
 
     //newType->printType();
 
@@ -322,6 +322,11 @@ public:
     if ((t != nullptr) && (t->type->getKind() == "ARRAY"))
     {
         node->extras.array = t->type;
+    }
+    else if ((t != nullptr) && (t->kind == "PREDEF_CONST"))
+    {
+        typeSpec* x = new typeSpec;
+        x->setKind(t->name);
     }
 
     ctx->entry = node;
@@ -697,6 +702,7 @@ public:
     {
       node = stack.getLocal()->getEntry(ctx->function_name()->IDENTIFIER()->getText());
       ctx->entry = node;
+      ctx->table = print.findTab(ctx->function_name()->IDENTIFIER()->getText());
     }
 
     if(node->type->getElemType() == "integer") return 1;

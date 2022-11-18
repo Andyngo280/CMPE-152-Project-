@@ -86,6 +86,15 @@ class symbStack
 
             return false;
         }
+        symbtab* findTab(string name)
+        {
+            for (int i = stack.size() - 1; i >= 0; i--)
+            {
+                if (name == stack[i]->getName()) return stack[i];
+            }
+
+            return nullptr;
+        }
         symbEntry *getEntry(string name)
         {
             for(int i = stack.size()-1; i >= 0; i--)
