@@ -9,7 +9,6 @@
 #include "typeSpec.h"
 #include <iostream>
 #include <string>
-#include <map>
 #include <vector>
 
 
@@ -32,7 +31,6 @@ struct node
 */
 
 vector<node> rtFrame; 
-//example: map<string, node> runtime can hold the variables
 
 
 class  codeVisitor : public ExprBaseVisitor 
