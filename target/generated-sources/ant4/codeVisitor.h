@@ -9,6 +9,7 @@
 #include "typeSpec.h"
 #include <iostream>
 #include <string>
+#include <map>
 #include <vector>
 
 
@@ -25,12 +26,14 @@ struct node
 {
     string name;
     string value;
+    int max;
 };
 
 /* Will act like a mini runtime stack frame holding the index of each variable
 */
 
 vector<node> rtFrame; 
+//example: map<string, node> runtime can hold the variables
 
 
 class  codeVisitor : public ExprBaseVisitor 
@@ -50,12 +53,21 @@ public:
   virtual antlrcpp::Any visitProgram(ExprParser::ProgramContext *ctx) override 
   {
     labels = 1;
-    cout << "stack \t\t RESB \t 10000" << endl;
-    cout << "stackindex \t WORD \t 0" << endl;
-    cout << "stackmax \t WORD \t 10000" << endl;
-    cout << "returnvalue \t RESB \t 500" << endl;
-    cout << "returnmax  \t WORD \t 500" << endl;
-    return visitChildren(ctx);
+    cout << "test\t\t\tSTART\t0" << endl;
+    visitChildren(ctx);
+    cout << "\t\t\t\tCLEAR X" << endl;
+    cout << "\t\t\t\tLDA #1747" << endl;
+    cout << "\t\t\t\tADDR A,X" << endl;
+    cout << "\t\t\t\tLDT stack,X" << endl;
+    cout << "stack\t\t\tRESB 10000" << endl;
+    cout << "stackindex\t\tWORD 0" << endl;
+    cout << "stackmax\t\tWORD 10000" << endl;
+    cout << "returnvalue\t\tRESB 500" << endl;
+    cout << "returnmax\t\tWORD 500" << endl;
+    cout << "\t\t\t\tEND  0" << endl;
+    return 0;
+    //return visitChildren(ctx);
+
   }
 
   virtual antlrcpp::Any visitProgram_header(ExprParser::Program_headerContext *ctx) override 
@@ -142,6 +154,27 @@ public:
 
       visitChildren(ctx);
 
+      /*for (int i = 0; i < rtFrame.size(); i++)
+      {
+        cout << rtFrame[i].name << " " << rtFrame[i].value << endl;
+      }*/
+
+      size += 6;
+      cout << "\t\t\t\tLDA stackindex" << endl;     //  load stack index to A
+      cout << "\t\t\t\tADD #" << size << endl;      //  add (max stack frame size) to A
+      cout << "\t\t\t\tSTA stackindex" << endl;     //  store ^^ into stack index
+      cout << "\t\t\t\tCLEAR X" << endl;            //  empty X
+      cout << "\t\t\t\tLDA #" << size - 3 << endl;  //  load (address of prev frame index) to A
+      cout << "\t\t\t\tADDR A,X" << endl;           //  X = X + A
+      cout << "\t\t\t\tLDA #0" << endl;             //  load previous frame index to A
+      cout << "\t\t\t\tSTA stack,X" << endl;        //  store ^^ to stack
+      cout << "\t\t\t\tCLEAR X" << endl;
+      cout << "\t\t\t\tLDA #" << size - 6 << endl;
+      cout << "\t\t\t\tADDR A,X" << endl;
+      cout << "\t\t\t\tLDA #1" << endl;
+      cout << "\t\t\t\tSTA stack,X" << endl;
+      size = 0;
+
     return 0;
   }
 
@@ -168,45 +201,67 @@ public:
     //  then we add the struct to the vector called rtFrame;
 
       int x = 1;
+      //cout << ctx->entry->name << " " << ctx->entry->type->getKind() << endl;
+
+      node entry;
 
       if (ctx->entry->type->getKind() == "integer")
       {
-          //increment size by integer amount of bytes
+          entry.name = ctx->entry->name;
+          size += 3;
+          entry.value = to_string(size);
       }
       else if (ctx->entry->type->getKind() == "char")
       {
-          //increment size by char amount amount of bytes
+          entry.name = ctx->entry->name;
+          size += 1;
+          entry.value = to_string(size);
       }
       else if (ctx->entry->type->getKind() == "boolean")
       {
-          //increment size by boolean amount of bytes
+          entry.name = ctx->entry->name;
+          size += 1;
+          entry.value = to_string(size);
       }
       else //an array check its typeSpec via extras member function of symbEntry
       {
-          typeSpec* spec = ctx->entry->type;
-          while (spec != nullptr)
-          {
-              if (spec->getElemType() == "integer")
-              {
-                  //multiply x by integer amount of bytes
-              }
-              else if (spec->getElemType() == "char")
-              {
-                  //multiply x by char amount amount of bytes
-              }
-              else if (spec->getElemType() == "boolean")
-              {
-                  //multiply x by boolean amount of bytes
-              }
-              else
-              {
-                  x *= spec->getAmt();
-              }
+          entry.name = ctx->entry->name;
 
+          typeSpec* spec = ctx->entry->extras.array;
+          while (spec->getType() != nullptr)
+          {
+              x *= spec->getAmt();
               spec = spec->getType();
           }
+
+              //cout << x << endl;
+          if (spec->getElemType() == "integer")
+              {
+                  x *= 3;
+              }
+          else if (spec->getElemType() == "char")
+              {
+                  x *= 1;
+                  //multiply x by char amount amount of bytes
+              }
+          else if (spec->getElemType() == "boolean")
+              {
+                x *= 1;
+                  //multiply x by boolean amount of bytes
+              }
+          
+          //cout << ctx->entry->name << endl;
+          //cout << x << endl;
+          if (spec != nullptr)
+          //cout << spec->getElemType() << endl;
+          size += x;
+          entry.value = to_string(size);
       }
-    return visitChildren(ctx);
+    //return visitChildren(ctx);
+    //cout << size << endl;
+    entry.max = size;
+    rtFrame.push_back(entry);
+    return 0;
   }
 
   virtual antlrcpp::Any visitFunctions(ExprParser::FunctionsContext *ctx) override {
@@ -267,7 +322,27 @@ public:
 
     //values x = visitExpression(ctx->expression());
     //cout << x.val << endl;
-    return visitChildren(ctx);
+
+    node value = visitExpression(ctx->expression());
+    //cout << value.name << " " << value.value << endl;
+    int offset = 0;
+    for (int i = 0; i < rtFrame.size(); i++)
+    {
+      if (rtFrame[i].name == ctx->variable()->IDENTIFIER()->getText())
+      {
+        offset = stoi(rtFrame[i].value);
+      }
+    }
+    //cout << rtFrame[rtFrame.size()-1].max << endl;
+    int max = rtFrame[rtFrame.size()-1].max + 6;
+    cout << endl;
+    cout << "\t\t\t\tLDA stackindex" << endl;
+    cout << "\t\t\t\tSUB #" << 6 + offset << endl;
+    cout << "\t\t\t\tCLEAR X" << endl;
+    cout << "\t\t\t\tADDR A,X" << endl;
+    cout << "\t\t\t\tLDA #" << value.value << endl;
+    cout << "\t\t\t\tSTA stack,X" << endl;
+    return 0;
   }
 
   virtual antlrcpp::Any visitRepeat_statement(ExprParser::Repeat_statementContext *ctx) override {
@@ -296,63 +371,93 @@ public:
 
   virtual antlrcpp::Any visitExpression(ExprParser::ExpressionContext *ctx) override 
   {
-    /*
+    
     int size = ctx->simple_expression().size();
     int type;
-    for(int i = 0; i < size; i++)
-    {
-      type = visitSimple_expression(ctx->simple_expression(i));
-    }
+    node value = visitSimple_expression(ctx->simple_expression(size-1));
 
-    cout << type << endl;
-    
-    return type;
-    */
-    return visitChildren(ctx);
+    //return visitChildren(ctx);
     
     /*values v;
     v.val = "100";
     return v;*/
+
+    return value;
   }
 
   virtual antlrcpp::Any visitSimple_expression(ExprParser::Simple_expressionContext *ctx) override 
   {
-      /*
+    
     int size = ctx->term().size();
     int x;
-    for(int i = 0; i < size; i++)
+    node value = visitTerm(ctx->term(size-1));
+    /*for(int i = 0; i < size; i++)
     {
       x = visitTerm(ctx->term(i));
     }
     return x;
-    */
+    
     return visitChildren(ctx);
+    */
+    return value;
   }
 
   virtual antlrcpp::Any visitTerm(ExprParser::TermContext *ctx) override 
-  {/*
+  {
     int size = ctx->factor().size();
     int x;
-    for(int i = 0; i < size; i++)
+    node value = visitFactor(ctx->factor(size-1));
+
+    /*for(int i = 0; i < size; i++)
     {
       x = visitFactor(ctx->factor(i));
     }
-    */
+    
     return visitChildren(ctx);
+    */
+    return value;
   }
 
   virtual antlrcpp::Any visitFactor(ExprParser::FactorContext *ctx) override 
   {
-      /*
-    int type = 0;
-    if(ctx->variable() != nullptr) type = visitVariable(ctx->variable());
-    else if(ctx->INTEGER() != nullptr) type = 1;
-    else if(ctx->CHAR() != nullptr) type = 2;
-    else if(ctx->TRUE() != nullptr) type = 3;
-    else if(ctx->FALSE() != nullptr) type = 3;
-    else if(ctx->expression() != nullptr) type = visitExpression(ctx->expression());
-    */
-    return visitChildren(ctx);
+    
+    node value;
+    
+    if(ctx->variable() != nullptr)
+    {
+
+    }
+
+    else if(ctx->INTEGER() != nullptr)
+    {
+        value.name = "constant";
+        value.value = ctx->INTEGER()->getText();
+    }
+
+    else if(ctx->CHAR() != nullptr)
+    {
+        value.name = "constant";
+        value.value = ctx->CHAR()->getText();
+    }
+
+    else if(ctx->TRUE() != nullptr)
+    {
+        value.name = "constant";
+        value.value = "1";
+    }
+
+    else if(ctx->FALSE() != nullptr)
+    {
+        value.name = "constant";
+        value.value = "0";
+    }
+
+    else if(ctx->expression() != nullptr)
+    {
+       
+    }
+    
+    return value;
   }
 
   virtual antlrcpp::Any visitVariable(ExprParser::VariableContext *ctx) override 

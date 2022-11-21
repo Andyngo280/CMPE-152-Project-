@@ -322,6 +322,8 @@ public:
     if ((t != nullptr) && (t->type->getKind() == "ARRAY"))
     {
         node->extras.array = t->type;
+        //cout << node->name << endl;
+        //cout << node->extras.array->getElemType() << endl;
     }
     else if ((t != nullptr) && (t->kind == "PREDEF_CONST"))
     {

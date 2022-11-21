@@ -8,14 +8,11 @@ type
 var
 	alpha, beta, gamma, omega : integer;
 	phi : arr;
-	over: time;
+	over: boolean;
 
 begin
 
 	beta := 10;
 	gamma := 3;
-	phi[3][4] := 2;
-    	alpha := 1 + beta * gamma;
-    	omega := 12 - alpha/(gamma+3) + 5;
 	over := true;
 end.
