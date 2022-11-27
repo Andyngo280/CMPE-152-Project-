@@ -619,7 +619,8 @@ public:
       else
       {
         symbEntry *node = stack.getEntry(ctx->IDENTIFIER()->getText());
-        string type = node->type->getElemType();
+        string type = node->type->getKind();
+        ctx->entry = node;
         if(type == "integer") return 1;
         else if(type == "char") return 2;
         else if(type == "boolean") return 3;

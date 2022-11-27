@@ -55,10 +55,14 @@ public:
     labels = 1;
     cout << "test\t\t\tSTART\t0" << endl;
     visitChildren(ctx);
+
+    //checking if a variable holds the correct value
     cout << "\t\t\t\tCLEAR X" << endl;
-    cout << "\t\t\t\tLDA #1747" << endl;
+    cout << "\t\t\t\tCLEAR T" << endl;
+    cout << "\t\t\t\tLDA #1747" << endl;    //finding beta: stackindex-offset => 1762-15
     cout << "\t\t\t\tADDR A,X" << endl;
     cout << "\t\t\t\tLDT stack,X" << endl;
+
     cout << "stack\t\t\tRESB 10000" << endl;
     cout << "stackindex\t\tWORD 0" << endl;
     cout << "stackmax\t\tWORD 10000" << endl;
@@ -159,7 +163,7 @@ public:
         cout << rtFrame[i].name << " " << rtFrame[i].value << endl;
       }*/
 
-      size += 6;
+      size += 9;
       cout << "\t\t\t\tLDA stackindex" << endl;     //  load stack index to A
       cout << "\t\t\t\tADD #" << size << endl;      //  add (max stack frame size) to A
       cout << "\t\t\t\tSTA stackindex" << endl;     //  store ^^ into stack index
@@ -169,10 +173,11 @@ public:
       cout << "\t\t\t\tLDA #0" << endl;             //  load previous frame index to A
       cout << "\t\t\t\tSTA stack,X" << endl;        //  store ^^ to stack
       cout << "\t\t\t\tCLEAR X" << endl;
-      cout << "\t\t\t\tLDA #" << size - 6 << endl;
+      cout << "\t\t\t\tLDA #" << size - 6 << endl;  //load address of frames scope
       cout << "\t\t\t\tADDR A,X" << endl;
       cout << "\t\t\t\tLDA #1" << endl;
-      cout << "\t\t\t\tSTA stack,X" << endl;
+      cout << "\t\t\t\tSTA stack,X" << endl;        //store scope
+      cout << endl;
       size = 0;
 
     return 0;
@@ -323,7 +328,7 @@ public:
     //values x = visitExpression(ctx->expression());
     //cout << x.val << endl;
 
-    node value = visitExpression(ctx->expression());
+    /*node value = visitExpression(ctx->expression());
     //cout << value.name << " " << value.value << endl;
     int offset = 0;
     for (int i = 0; i < rtFrame.size(); i++)
@@ -341,7 +346,68 @@ public:
     cout << "\t\t\t\tCLEAR X" << endl;
     cout << "\t\t\t\tADDR A,X" << endl;
     cout << "\t\t\t\tLDA #" << value.value << endl;
-    cout << "\t\t\t\tSTA stack,X" << endl;
+    cout << "\t\t\t\tSTA stack,X" << endl;*/
+
+      int x = visitExpression(ctx->expression());
+      //cout << value.name << " " << value.value << endl;
+      int offset = 0;
+      for (int i = 0; i < rtFrame.size(); i++)
+      {
+          if (rtFrame[i].name == ctx->variable()->IDENTIFIER()->getText())
+          {
+              offset = stoi(rtFrame[i].value);
+          }
+      }
+      //cout << rtFrame[rtFrame.size()-1].max << endl;
+      int max = rtFrame[rtFrame.size() - 1].max + 9;
+      if (ctx->variable()->IDENTIFIER() != nullptr)
+      {
+          //cout << "assign" << endl;
+
+          if (ctx->variable()->entry->type->getKind() == "integer")
+          {
+              cout << "\t\t\t\tLDA stackindex" << endl;         //load index to A
+              cout << "\t\t\t\tSUB #3" << endl;                 //decrement index to get addr of rhs value
+              cout << "\t\t\t\tSTA stackindex" << endl;
+              cout << "\t\t\t\tCLEAR X" << endl;                
+              cout << "\t\t\t\tADDR A,X" << endl;               //load addr to X
+              cout << "\t\t\t\tLDT stack,X" << endl;            //T register holds rhs value
+          }
+          else if (ctx->variable()->entry->type->getKind() == "char")
+          {
+              cout << "\t\t\t\tLDA stackindex" << endl;         //load index to A
+              cout << "\t\t\t\tSUB #1" << endl;                 //decrement index to get addr of rhs value
+              cout << "\t\t\t\tSTA stackindex" << endl;
+              cout << "\t\t\t\tCLEAR X" << endl;
+              cout << "\t\t\t\tADDR A,X" << endl;               //load addr to X
+              cout << "\t\t\t\tLDT stack,X" << endl;            //T register holds rhs value
+          }
+          else if (ctx->variable()->entry->type->getKind() == "boolean")
+          {
+              cout << "\t\t\t\tLDA stackindex" << endl;         //load index to A
+              cout << "\t\t\t\tSUB #1" << endl;                 //decrement index to get addr of rhs value
+              cout << "\t\t\t\tSTA stackindex" << endl;
+              cout << "\t\t\t\tCLEAR X" << endl;
+              cout << "\t\t\t\tADDR A,X" << endl;               //load addr to X
+              cout << "\t\t\t\tLDT stack,X" << endl;            //T register holds rhs value
+          }
+      }
+      else if (ctx->variable()->function_call() != nullptr)
+      {
+
+      }
+      else if (ctx->variable()->array_element() != nullptr)
+      {
+
+      }
+
+      cout << "\t\t\t\tLDA stackindex" << endl;                 //load index to A
+      cout << "\t\t\t\tSUB #" << 9 + offset << endl;            //subtract 9 and offset to get addr of lhs
+      cout << "\t\t\t\tCLEAR X" << endl;
+      cout << "\t\t\t\tADDR A,X" << endl;                       //load addr to x
+      cout << "\t\t\t\tSTT stack,X" << endl;                    //store T(rhs) value to lhs
+      cout << endl;
+
     return 0;
   }
 
@@ -373,8 +439,9 @@ public:
   {
     
     int size = ctx->simple_expression().size();
-    int type;
-    node value = visitSimple_expression(ctx->simple_expression(size-1));
+    int type = visitSimple_expression(ctx->simple_expression(size - 1));
+    //cout << "exp" << endl;
+    //node value = visitSimple_expression(ctx->simple_expression(size-1));
 
     //return visitChildren(ctx);
     
@@ -382,88 +449,274 @@ public:
     v.val = "100";
     return v;*/
 
-    return value;
+    //return value;
+
+    return 0;
   }
 
   virtual antlrcpp::Any visitSimple_expression(ExprParser::Simple_expressionContext *ctx) override 
   {
     
     int size = ctx->term().size();
-    int x;
-    node value = visitTerm(ctx->term(size-1));
-    /*for(int i = 0; i < size; i++)
+    int x1 = visitTerm(ctx->term(0));
+    int p = 0; //plus index
+    int m = 0; //minus index
+    //cout << "simp" << endl;
+    //node value = visitTerm(ctx->term(size-1));
+
+    for(int i = 1; i < size; i++)
     {
-      x = visitTerm(ctx->term(i));
+        cout << endl;
+        visitTerm(ctx->term(i));
+
+        if (p < ctx->PLUSOP().size())
+        {
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+            cout << "\t\t\t\tADDR A,T" << endl;         //add A and T store in T
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+
+            p++;
+        }
+        else if (m < ctx->MINUSOP().size())
+        {
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #6" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+            cout << "\t\t\t\tADD #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+            cout << "\t\t\t\tSUBR A,T" << endl;         //subtract T by A store in T
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+
+            m++;
+        }
     }
-    return x;
+    /*return x;
     
     return visitChildren(ctx);
     */
-    return value;
+    //return value;
+
+    return 0;
   }
 
   virtual antlrcpp::Any visitTerm(ExprParser::TermContext *ctx) override 
   {
     int size = ctx->factor().size();
-    int x;
-    node value = visitFactor(ctx->factor(size-1));
+    int x1 = visitFactor(ctx->factor(0));
+    int m = 0; //multiply vector index
+    int d = 0; //divide vector index
+    //cout << "term" << endl;
+    //node value = visitFactor(ctx->factor(size - 1));
 
-    /*for(int i = 0; i < size; i++)
+    for (int i = 1; i < size; i++)
     {
-      x = visitFactor(ctx->factor(i));
+        cout << endl;
+        visitFactor(ctx->factor(i));
+        if (m < ctx->MULTOP().size())
+        {
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+            cout << "\t\t\t\tMULR A,T" << endl;         //multiply A and T store in T
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+
+            m++;
+        }
+        else if (d < ctx->DIVOP().size())
+        {
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #6" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+            cout << "\t\t\t\tADD #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+            cout << "\t\t\t\tDIVR A,T" << endl;         //divide T by A store in T
+            cout << "\t\t\t\tLDA stackindex" << endl;
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
+            cout << "\t\t\t\tSUB #3" << endl;
+            cout << "\t\t\t\tCLEAR X" << endl;
+            cout << "\t\t\t\tADDR A,X" << endl;
+            cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+
+            d++;
+        }
     }
     
-    return visitChildren(ctx);
-    */
-    return value;
+    //return value;
+
+    return 0;
   }
 
   virtual antlrcpp::Any visitFactor(ExprParser::FactorContext *ctx) override 
   {
     
-    node value;
+    /*node value;
     
     if(ctx->variable() != nullptr)
     {
 
     }
-
     else if(ctx->INTEGER() != nullptr)
     {
         value.name = "constant";
         value.value = ctx->INTEGER()->getText();
     }
-
     else if(ctx->CHAR() != nullptr)
     {
         value.name = "constant";
         value.value = ctx->CHAR()->getText();
     }
-
     else if(ctx->TRUE() != nullptr)
     {
         value.name = "constant";
         value.value = "1";
     }
-
     else if(ctx->FALSE() != nullptr)
     {
         value.name = "constant";
         value.value = "0";
     }
-
     else if(ctx->expression() != nullptr)
     {
        
     }
     
-    return value;
+    return value;*/
+
+      if (ctx->variable() != nullptr)
+      {
+          visitVariable(ctx->variable());
+      }
+      else if (ctx->INTEGER() != nullptr)
+      {
+          cout << "\t\t\t\tLDA stackindex" << endl;
+          cout << "\t\t\t\tADD #3" << endl;
+          cout << "\t\t\t\tSTA stackindex" << endl;
+          cout << "\t\t\t\tSUB #3" << endl;
+          cout << "\t\t\t\tCLEAR X" << endl;
+          cout << "\t\t\t\tADDR A,X" << endl;
+          cout << "\t\t\t\tLDA #" << ctx->INTEGER()->getText() << endl;
+          cout << "\t\t\t\tSTA stack,X" << endl;
+      }
+      else if (ctx->CHAR() != nullptr)
+      {
+          cout << "\t\t\t\tLDA stackindex" << endl;
+          cout << "\t\t\t\tADD #1" << endl;
+          cout << "\t\t\t\tSTA stackindex" << endl;
+          cout << "\t\t\t\tSUB #1" << endl;
+          cout << "\t\t\t\tCLEAR X" << endl;
+          cout << "\t\t\t\tADDR A,X" << endl;
+          cout << "\t\t\t\tLDA #" << ctx->CHAR()->getText() << endl;
+          cout << "\t\t\t\tSTA stack,X" << endl;
+      }
+      else if (ctx->TRUE() != nullptr)
+      {
+          cout << "\t\t\t\tLDA stackindex" << endl;
+          cout << "\t\t\t\tADD #1" << endl;
+          cout << "\t\t\t\tSTA stackindex" << endl;
+          cout << "\t\t\t\tSUB #1" << endl;
+          cout << "\t\t\t\tCLEAR X" << endl;
+          cout << "\t\t\t\tADDR A,X" << endl;
+          cout << "\t\t\t\tLDA #1" << endl;
+          cout << "\t\t\t\tSTA stack,X" << endl;
+      }
+      else if (ctx->FALSE() != nullptr)
+      {
+          cout << "\t\t\t\tLDA stackindex" << endl;
+          cout << "\t\t\t\tADD #1" << endl;
+          cout << "\t\t\t\tSTA stackindex" << endl;
+          cout << "\t\t\t\tSUB #1" << endl;
+          cout << "\t\t\t\tCLEAR X" << endl;
+          cout << "\t\t\t\tADDR A,X" << endl;
+          cout << "\t\t\t\tLDA #0" << endl;
+          cout << "\t\t\t\tSTA stack,X" << endl;
+      }
+      else if (ctx->expression() != nullptr)
+      {
+          visitExpression(ctx->expression());
+      }
+
+      return 0;
   }
 
   virtual antlrcpp::Any visitVariable(ExprParser::VariableContext *ctx) override 
   {
-    return visitChildren(ctx);
-    //return 1;
+      if (ctx->IDENTIFIER() != nullptr)
+      {
+          int offset = 0;
+          for (int i = 0; i < rtFrame.size(); i++)
+          {
+              if (rtFrame[i].name == ctx->variable()->IDENTIFIER()->getText())
+              {
+                  offset = stoi(rtFrame[i].value);
+              }
+          }
+
+          offset += 9;
+
+          if (ctx->entry->type->getKind() == "integer")
+          {
+
+          }
+          else if (ctx->entry->type->getKind() == "char")
+          {
+
+          }
+          else if (ctx->entry->type->getKind() == "boolean")
+          {
+
+          }
+
+      }
+      else if (ctx->function_call() != nullptr)
+      {
+
+      }
+      else if (ctx->array_element() != nullptr)
+      {
+
+      }
+      return 0;
   }
 
   virtual antlrcpp::Any visitArray_element(ExprParser::Array_elementContext *ctx) override {
