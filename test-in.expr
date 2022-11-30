@@ -11,13 +11,8 @@ var
 	over: boolean;
 
 begin
-
-	beta := 10;
 	gamma := 3;
-	over := true;
-
-	gamma := 3 * 2;
-	alpha := 12 + (6 - 5);
-	beta := 12 / 3 * 2;
+	alpha := 3 + (6 - 5);
+	beta := 12 / gamma * 2;
 	
 end.
