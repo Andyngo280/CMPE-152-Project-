@@ -209,15 +209,15 @@ test			START	0
 				LDA #3
 				STA stack,X
 				LDA stackindex
-				SUB #3
+				SUB #6
 				CLEAR X
 				ADDR A,X
 				LDT stack,X
-				SUB #3
+				ADD #3
 				CLEAR X
 				ADDR A,X
 				LDA stack,X
-				MULR A,T
+				DIVR A,T
 				LDA stackindex
 				SUB #3
 				STA stackindex
@@ -235,15 +235,15 @@ test			START	0
 				LDA #2
 				STA stack,X
 				LDA stackindex
-				SUB #6
+				SUB #3
 				CLEAR X
 				ADDR A,X
 				LDT stack,X
-				ADD #3
+				SUB #3
 				CLEAR X
 				ADDR A,X
 				LDA stack,X
-				DIVR A,T
+				MULR A,T
 				LDA stackindex
 				SUB #3
 				STA stackindex

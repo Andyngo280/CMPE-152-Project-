@@ -594,6 +594,10 @@ public:
     //return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitMdop(ExprParser::MdopContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitFactor(ExprParser::FactorContext *ctx) override 
   {
     int x = 0;

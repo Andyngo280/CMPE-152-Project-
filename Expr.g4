@@ -1,5 +1,12 @@
 grammar Expr;
 
+@header
+{
+
+	#include "symbEntry.h"
+
+}
+
 program: program_header declarations compound_statement DOT;
 
 program_header: PROGRAM IDENTIFIER SEMICOLON;
@@ -86,8 +93,10 @@ expression: simple_expression (EQUAL | NE | LTEQ | GTEQ | LT | GT) simple_expres
 simple_expression: ((PLUSOP | MINUSOP)* term)+ ;
 
 term: factor
-	| factor ((MULTOP | DIVOP) factor)+
+	| factor ((mdop) factor)+
 	;
+
+mdop: MULTOP | DIVOP;
 
 factor: variable
 	| INTEGER

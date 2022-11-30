@@ -1,4 +1,9 @@
 
+
+	#include "symbEntry.h"
+
+
+
 // Generated from Expr.g4 by ANTLR 4.7.2
 
 #pragma once
@@ -112,6 +117,8 @@ public:
     virtual antlrcpp::Any visitSimple_expression(ExprParser::Simple_expressionContext *context) = 0;
 
     virtual antlrcpp::Any visitTerm(ExprParser::TermContext *context) = 0;
+
+    virtual antlrcpp::Any visitMdop(ExprParser::MdopContext *context) = 0;
 
     virtual antlrcpp::Any visitFactor(ExprParser::FactorContext *context) = 0;
 

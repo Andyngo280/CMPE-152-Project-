@@ -10,3 +10,4 @@ Afterwards, can just run the program using either "make" or
 Need to run this in a place where you have antlr4-runtime library for this to work
 Need to empty test-out.txt to get new output
 	for some reason it just adds to the text file instead of overwriting it
+

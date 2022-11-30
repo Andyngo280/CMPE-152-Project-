@@ -1,4 +1,3 @@
-
 // Generated from Expr.g4 by ANTLR 4.7.2
 
 #pragma once
@@ -44,9 +43,9 @@ public:
     RuleStatement = 35, RuleCompound_statement = 36, RuleAssign_statement = 37, 
     RuleRepeat_statement = 38, RuleIf_statement = 39, RuleWhile_statement = 40, 
     RuleCase_statement = 41, RuleCondition = 42, RuleFor_statement = 43, 
-    RuleExpression = 44, RuleSimple_expression = 45, RuleTerm = 46, RuleFactor = 47, 
-    RuleVariable = 48, RuleArray_element = 49, RuleElement = 50, RuleFunction_call = 51, 
-    RuleFunction_name = 52, RuleArg_list = 53, RuleArg = 54
+    RuleExpression = 44, RuleSimple_expression = 45, RuleTerm = 46, RuleMdop = 47, 
+    RuleFactor = 48, RuleVariable = 49, RuleArray_element = 50, RuleElement = 51, 
+    RuleFunction_call = 52, RuleFunction_name = 53, RuleArg_list = 54, RuleArg = 55
   };
 
   ExprParser(antlr4::TokenStream *input);
@@ -106,6 +105,7 @@ public:
   class ExpressionContext;
   class Simple_expressionContext;
   class TermContext;
+  class MdopContext;
   class FactorContext;
   class VariableContext;
   class Array_elementContext;
@@ -140,7 +140,6 @@ public:
     antlr4::tree::TerminalNode *SEMICOLON();
 
     symbEntry *entry;
-
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -224,7 +223,6 @@ public:
 
     symbEntry *entry;
 
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
@@ -299,7 +297,6 @@ public:
     antlr4::tree::TerminalNode *IDENTIFIER();
 
     symbEntry *entry;
-
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -481,7 +478,6 @@ public:
 
     symbEntry *entry;
 
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
@@ -498,7 +494,6 @@ public:
     antlr4::tree::TerminalNode* SEMICOLON(size_t i);
 
     symbEntry *entry;
-
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -532,7 +527,6 @@ public:
 
     symbEntry *entry;
 
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
@@ -550,7 +544,6 @@ public:
     ParametersContext *parameters();
 
     symbEntry *entry;
-
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -641,7 +634,6 @@ public:
     antlr4::tree::TerminalNode *IDENTIFIER();
 
     symbEntry *entry;
-
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -874,10 +866,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<FactorContext *> factor();
     FactorContext* factor(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> MULTOP();
-    antlr4::tree::TerminalNode* MULTOP(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> DIVOP();
-    antlr4::tree::TerminalNode* DIVOP(size_t i);
+    std::vector<MdopContext *> mdop();
+    MdopContext* mdop(size_t i);
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -885,6 +875,20 @@ public:
   };
 
   TermContext* term();
+
+  class  MdopContext : public antlr4::ParserRuleContext {
+  public:
+    MdopContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *MULTOP();
+    antlr4::tree::TerminalNode *DIVOP();
+
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  MdopContext* mdop();
 
   class  FactorContext : public antlr4::ParserRuleContext {
   public:
@@ -917,7 +921,6 @@ public:
 
     symbEntry *entry;
 
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
@@ -933,7 +936,6 @@ public:
     ElementContext* element(size_t i);
 
     symbEntry *entry;
-
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -970,7 +972,7 @@ public:
     Arg_listContext *arg_list();
 
     symbEntry *entry;
-    symbtab* table;
+    symbtab *table;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

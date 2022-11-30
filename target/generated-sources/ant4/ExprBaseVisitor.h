@@ -1,4 +1,9 @@
 
+
+	#include "symbEntry.h"
+
+
+
 // Generated from Expr.g4 by ANTLR 4.7.2
 
 #pragma once
@@ -200,6 +205,10 @@ public:
   }
 
   virtual antlrcpp::Any visitTerm(ExprParser::TermContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitMdop(ExprParser::MdopContext *ctx) override {
     return visitChildren(ctx);
   }
 
