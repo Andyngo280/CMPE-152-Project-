@@ -167,8 +167,7 @@ public:
         }*/
 
         size += 9;
-        cout << instructTabs << "LDA stackindex";     //  load stack index to A
-        cout << ";  visiting variables" << endl;
+        cout << instructTabs << "LDA stackindex" << endl;     //  load stack index to A
         cout << instructTabs << "ADD #" << size << endl;      //  add (max stack frame size) to A
         cout << instructTabs << "STA stackindex" << endl;     //  store ^^ into stack index
         cout << instructTabs << "CLEAR X" << endl;            //  empty X
@@ -346,8 +345,7 @@ public:
 
             if (ctx->variable()->entry->type->getKind() == "integer")
             {
-                cout << instructTabs << "LDA stackindex";         //load index to A
-                cout << ";  visiting assignment statement" << endl;
+                cout << instructTabs << "LDA stackindex" << endl;         //load index to A
                 cout << instructTabs << "SUB #3" << endl;                 //decrement index to get addr of rhs value
                 cout << instructTabs << "STA stackindex" << endl;
                 cout << instructTabs << "CLEAR X" << endl;
@@ -357,8 +355,7 @@ public:
             }
             else if (ctx->variable()->entry->type->getKind() == "char")
             {
-                cout << instructTabs << "LDA stackindex";         //load index to A
-                cout << ";  visiting assignment statement" << endl;
+                cout << instructTabs << "LDA stackindex" << endl;         //load index to A
                 cout << instructTabs << "SUB #1" << endl;                 //decrement index to get addr of rhs value
                 cout << instructTabs << "STA stackindex" << endl;
                 cout << instructTabs << "CLEAR X" << endl;
@@ -368,8 +365,7 @@ public:
             }
             else if (ctx->variable()->entry->type->getKind() == "boolean")
             {
-                cout << instructTabs << "LDA stackindex";         //load index to A
-                cout << ";  visiting assignment statement" << endl;
+                cout << instructTabs << "LDA stackindex" << endl;         //load index to A
                 cout << instructTabs << "SUB #1" << endl;                 //decrement index to get addr of rhs value
                 cout << instructTabs << "STA stackindex" << endl;
                 cout << instructTabs << "CLEAR X" << endl;
@@ -549,8 +545,7 @@ public:
                 x1 = 0;
                 if (mtx->MULTOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #" << 9 + o1 << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -572,8 +567,7 @@ public:
                 }
                 else if (mtx->DIVOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #" << 9 + o1 << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -599,8 +593,7 @@ public:
                 x1 = 0;
                 if (mtx->MULTOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #" << 12 + o1 << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -620,8 +613,7 @@ public:
                 }
                 else if (mtx->DIVOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #3" << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -645,8 +637,7 @@ public:
                 x1 = 0;
                 if (mtx->MULTOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #" << 12 + o2 << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -665,8 +656,7 @@ public:
                 }
                 else if (mtx->DIVOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #3" << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -689,8 +679,7 @@ public:
             {
                 if (mtx->MULTOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #3" << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
@@ -711,8 +700,7 @@ public:
                 }
                 else if (mtx->DIVOP() != nullptr)
                 {
-                    cout << instructTabs << "LDA stackindex";
-                    cout << ";  visiting term" << endl;
+                    cout << instructTabs << "LDA stackindex" << endl;
                     cout << instructTabs << "SUB #6" << endl;
                     cout << instructTabs << "CLEAR X" << endl;
                     cout << instructTabs << "ADDR A,X" << endl;
