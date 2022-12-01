@@ -163,6 +163,77 @@ test			START	0
 				LDT stack,X
 
 				LDA stackindex
+				SUB #21
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA #3
+				STA stack,X
+				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA #5
+				STA stack,X
+				LDA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA stack,X
+				ADDR A,T
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA #2
+				STA stack,X
+				LDA stackindex
+				SUB #6
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				ADD #3
+				CLEAR X
+				ADDR A,X
+				LDA stack,X
+				SUBR A,T
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+
+				LDA stackindex
 				SUB #15
 				CLEAR X
 				ADDR A,X

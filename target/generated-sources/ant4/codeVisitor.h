@@ -435,60 +435,183 @@ public:
 
         int size = ctx->term().size();
         int x1 = visitTerm(ctx->term(0));
+        int x2 = 0;
+        int o1 = 0;
         int p = 0; //plus index
         int m = 0; //minus index
- 
+
         for (int i = 1; i < size; i++)
         {
-            visitTerm(ctx->term(i));
+            x2 = visitTerm(ctx->term(i));
 
             if (p < ctx->PLUSOP().size())
             {
-                cout << "\t\t\t\tLDA stackindex" << endl;
-                cout << "\t\t\t\tSUB #3" << endl;
-                cout << "\t\t\t\tCLEAR X" << endl;
-                cout << "\t\t\t\tADDR A,X" << endl;
-                cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
-                cout << "\t\t\t\tSUB #3" << endl;
-                cout << "\t\t\t\tCLEAR X" << endl;
-                cout << "\t\t\t\tADDR A,X" << endl;
-                cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
-                cout << "\t\t\t\tADDR A,T" << endl;         //add A and T store in T
-                cout << "\t\t\t\tLDA stackindex" << endl;
-                cout << "\t\t\t\tSUB #3" << endl;
-                cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
-                cout << "\t\t\t\tSUB #3" << endl;
-                cout << "\t\t\t\tCLEAR X" << endl;
-                cout << "\t\t\t\tADDR A,X" << endl;
-                cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                if ((x1 > 0) && (x2 > 0))
+                {
+                    x1 = 0;
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #" << 9 + x1 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #" << 9 + x2 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tADDR A,T" << endl;         //add A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tADD #3" << endl;
+                    cout << "\t\t\t\tSTA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
+                else if ((x1 > 0) && (x2 == 0))
+                {
+                    x1 = 0;
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x1 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tADDR A,T" << endl;         //add A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
+                else if ((x1 == 0) && (x2 > 0))
+                {
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x2 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tADDR A,T" << endl;         //add A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
+                else
+                {
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tADDR A,T" << endl;         //add A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
 
                 p++;
             }
             else if (m < ctx->MINUSOP().size())
             {
-                cout << "\t\t\t\tLDA stackindex" << endl;
-                cout << "\t\t\t\tSUB #6" << endl;
-                cout << "\t\t\t\tCLEAR X" << endl;
-                cout << "\t\t\t\tADDR A,X" << endl;
-                cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
-                cout << "\t\t\t\tADD #3" << endl;
-                cout << "\t\t\t\tCLEAR X" << endl;
-                cout << "\t\t\t\tADDR A,X" << endl;
-                cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
-                cout << "\t\t\t\tSUBR A,T" << endl;         //subtract T by A store in T
-                cout << "\t\t\t\tLDA stackindex" << endl;
-                cout << "\t\t\t\tSUB #3" << endl;
-                cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
-                cout << "\t\t\t\tSUB #3" << endl;
-                cout << "\t\t\t\tCLEAR X" << endl;
-                cout << "\t\t\t\tADDR A,X" << endl;
-                cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
-
+                if ((x1 > 0) && (x2 > 0))
+                {
+                    x1 = 0;
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #" << 9 + x1 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #" << 9 + x2 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tSUBR A,T" << endl;         //subtract A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tADD #3" << endl;
+                    cout << "\t\t\t\tSTA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
+                else if ((x1 > 0) && (x2 == 0))
+                {
+                    x1 = 0;
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x1 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tSUBR A,T" << endl;         //subtract A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
+                else if ((x1 == 0) && (x2 > 0))
+                {
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x2 << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tSUBR A,T" << endl;         //subtract A and T store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
+                else
+                {
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #6" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
+                    cout << "\t\t\t\tADD #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
+                    cout << "\t\t\t\tSUBR A,T" << endl;         //subtract T by A store in T
+                    cout << "\t\t\t\tLDA stackindex" << endl;
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tSTA stackindex" << endl;   //pop top factor from stack
+                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tCLEAR X" << endl;
+                    cout << "\t\t\t\tADDR A,X" << endl;
+                    cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
+                }
                 m++;
             }
         }
  
-        return 0;
+        return x1;
     }
 
     virtual antlrcpp::Any visitTerm(ExprParser::TermContext* ctx) override
@@ -501,17 +624,6 @@ public:
         int o2 = 0;
         ExprParser::MdopContext* mtx;
 
-        if (x1 == 1)
-        {
-            for (int i = 0; i < rtFrame.size(); i++)
-            {
-                if (rtFrame[i].name == ctx->factor(0)->variable()->IDENTIFIER()->getText())
-                {
-                    o1 = stoi(rtFrame[i].value);
-                }
-            }
-        }
-
         for (int i = 1; i < size; i++)
         {
             x2 = visitFactor(ctx->factor(i));
@@ -520,35 +632,24 @@ public:
 
             //cout << x1 << " " << x2 << endl;
 
-            if (x2 == 1)
-            {
-                for (int j = 0; j < rtFrame.size(); j++)
-                {
-                    if (rtFrame[j].name == ctx->factor(i)->variable()->IDENTIFIER()->getText())
-                    {
-                        o2 = stoi(rtFrame[j].value);
-                    }
-                }
-            }
-
-            if ((x1 == 1) && (x2 == 1))
+            if ((x1 > 0) && (x2 > 0))
             {
                 x1 = 0;
                 if (mtx->MULTOP() != nullptr)
                 {
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 9 + o1 << endl;
+                    cout << "\t\t\t\tSUB #" << 9 + x1 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 9 + o2 << endl;
+                    cout << "\t\t\t\tSUB #" << 9 + x2 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
                     cout << "\t\t\t\tMULR A,T" << endl;         //multiply A and T store in T
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #3" << endl;
+                    cout << "\t\t\t\tADD #3" << endl;
                     cout << "\t\t\t\tSTA stackindex" << endl;
                     cout << "\t\t\t\tSUB #3" << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
@@ -558,12 +659,12 @@ public:
                 else if (mtx->DIVOP() != nullptr)
                 {
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 9 + o1 << endl;
+                    cout << "\t\t\t\tSUB #" << 9 + x1 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 9 + o2 << endl;
+                    cout << "\t\t\t\tSUB #" << 9 + x2 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
@@ -577,13 +678,13 @@ public:
                     cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
                 }
             }
-            else if ((x1 == 1) && (x2 == 0))
+            else if ((x1 > 0) && (x2 == 0))
             {
                 x1 = 0;
                 if (mtx->MULTOP() != nullptr)
                 {
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 12 + o1 << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x1 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
@@ -607,7 +708,7 @@ public:
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 12 + o1 << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x1 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
@@ -619,13 +720,13 @@ public:
                     cout << "\t\t\t\tSTT stack,X" << endl;      //store product in stack
                 }
             }
-            else if ((x1 == 0) && (x2 == 1))
+            else if ((x1 == 0) && (x2 > 0))
             {
                 x1 = 0;
                 if (mtx->MULTOP() != nullptr)
                 {
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 12 + o2 << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x2 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
@@ -648,7 +749,7 @@ public:
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDT stack,X" << endl;      //store factor in T register
                     cout << "\t\t\t\tLDA stackindex" << endl;
-                    cout << "\t\t\t\tSUB #" << 12 + o2 << endl;
+                    cout << "\t\t\t\tSUB #" << 12 + x2 << endl;
                     cout << "\t\t\t\tCLEAR X" << endl;
                     cout << "\t\t\t\tADDR A,X" << endl;
                     cout << "\t\t\t\tLDA stack,X" << endl;      //store factor in A register
@@ -707,7 +808,7 @@ public:
             m++;
         }
 
-        return 0;
+        return x1;
     }
 
     virtual antlrcpp::Any visitMdop(ExprParser::MdopContext* ctx) override {
@@ -719,8 +820,8 @@ public:
         if (ctx->variable() != nullptr)
         {
             //cout << "Variable" << endl;
-            //int x = visitVariable(ctx->variable());
-            return 1;
+            int x = visitVariable(ctx->variable());
+            return x;
         }
         else if (ctx->INTEGER() != nullptr)
         {
@@ -776,9 +877,16 @@ public:
 
     virtual antlrcpp::Any visitVariable(ExprParser::VariableContext* ctx) override
     {
+        int o1 = 0;
         if (ctx->IDENTIFIER() != nullptr)
         {
-            return 1;
+            for (int i = 0; i < rtFrame.size(); i++)
+            {
+                if (rtFrame[i].name == ctx->IDENTIFIER()->getText())
+                {
+                    o1 = stoi(rtFrame[i].value);
+                }
+            }
         }
         else if (ctx->function_call() != nullptr)
         {
@@ -788,7 +896,7 @@ public:
         {
 
         }
-        return 0;
+        return o1;
     }
 
     virtual antlrcpp::Any visitArray_element(ExprParser::Array_elementContext* ctx) override {

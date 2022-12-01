@@ -13,6 +13,7 @@ var
 begin
 	gamma := 3;
 	alpha := 3 + (6 - 5);
-	beta := 12 / gamma * 2;
+	omega := 12 / gamma * 2;
+	beta := 3 + 5 - 2;
 	
 end.
