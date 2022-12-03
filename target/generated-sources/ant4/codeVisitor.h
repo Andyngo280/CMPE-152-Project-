@@ -58,12 +58,12 @@ public:
 
     virtual antlrcpp::Any visitProgram(ExprParser::ProgramContext* ctx) override
     {
-        output.open("assign_test.asm");
+        output.open("loop_test.asm");
 
         labels = 1;
         output << "test\t\t\tSTART\t0" << endl;
         visitChildren(ctx);
-        output << endl;
+        //output << endl;
 
         /*//checking if a variable holds the correct value
         output << instructTabs << "CLEAR X" << endl;
@@ -188,7 +188,7 @@ public:
         output << instructTabs << "ADDR A,X" << endl;
         output << instructTabs << "LDA #1" << endl;
         output << instructTabs << "STA stack,X" << endl;        //store scope
-        output << endl;
+        //output << endl;
         size = 0;
 
         return 0;
@@ -333,7 +333,7 @@ public:
 
     virtual antlrcpp::Any visitAssign_statement(ExprParser::Assign_statementContext* ctx) override 
     {
-        output << endl;
+        //output << endl;
         int x = visitExpression(ctx->expression());
         //output << value.name << " " << value.value << endl;
         //output << "assign" << endl;
@@ -440,17 +440,21 @@ public:
 
     virtual antlrcpp::Any visitRepeat_statement(ExprParser::Repeat_statementContext* ctx) override 
     {
-        output << "R" << local_jump;
-        local_jump++;
+        //output << endl;
+        output << "I" << local_jump;
 
         visitStatement_list(ctx->statement_list());
+
+        visitExpression(ctx->expression());
+
+        local_jump++;
 
         return 0;
     }
 
     virtual antlrcpp::Any visitIf_statement(ExprParser::If_statementContext* ctx) override 
     {
-        output << endl;
+        //output << endl;
         int x = visitExpression(ctx->expression());
         x = visitStatement(ctx->statement(0));
         output << "I" << local_jump;
@@ -592,7 +596,7 @@ public:
                 output << instructTabs << "JEQ I" << local_jump << endl;
                 output << instructTabs << "JGT I" << local_jump << endl;
             }
-            else
+            else if (ctx->GT() != nullptr)
             {
                 output << instructTabs << "JEQ I" << local_jump << endl;
                 output << instructTabs << "JLT I" << local_jump << endl;

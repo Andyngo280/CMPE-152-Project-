@@ -1,10 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\target",
-    "\\target\\generated-sources",
-    "\\target\\generated-sources\\ant4"
+    ""
   ],
-  "SelectedNode": "\\README.txt",
+  "SelectedNode": "\\Expr.g4",
   "PreviewInSolutionExplorer": false
 }

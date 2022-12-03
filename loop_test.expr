@@ -11,9 +11,11 @@ var
 	over: boolean;
 
 begin
-	beta := 2;
+	beta := 1;
+	alpha := 3;
 
 	REPEAT
-		beta := beta + 1;
-	UNTIL beta = 5;
+		alpha := alpha - 1;
+		beta := beta * 2;
+	UNTIL alpha = 0;
 end.

@@ -137,11 +137,6 @@ I0
 				ADDR A,X
 				STT stack,X
 
-				CLEAR X
-				CLEAR T
-				LDA #1747
-				ADDR A,X
-				LDT stack,X
 stack			RESB 10000
 stackindex		WORD 0
 stackmax		WORD 10000

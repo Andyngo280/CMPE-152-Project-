@@ -12,15 +12,13 @@ test			START	0
 				ADDR A,X
 				LDA #1
 				STA stack,X
-
-
 				LDA stackindex
 				ADD #3
 				STA stackindex
 				SUB #3
 				CLEAR X
 				ADDR A,X
-				LDA #2
+				LDA #1
 				STA stack,X
 				LDA stackindex
 				SUB #3
@@ -33,14 +31,67 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-R0
 				LDA stackindex
 				ADD #3
 				STA stackindex
 				SUB #3
 				CLEAR X
 				ADDR A,X
+				LDA #3
+				STA stack,X
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				LDA #1762
+				SUB #12
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+I0				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
 				LDA #1
+				STA stack,X
+				LDA #1762
+				SUB #12
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				LDA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA stack,X
+				SUBR A,T
+				LDA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				LDA #1762
+				SUB #12
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA #2
 				STA stack,X
 				LDA #1762
 				SUB #15
@@ -52,7 +103,7 @@ R0
 				CLEAR X
 				ADDR A,X
 				LDA stack,X
-				ADDR A,T
+				MULR A,T
 				LDA stackindex
 				SUB #3
 				CLEAR X
@@ -69,7 +120,28 @@ R0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-
+				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA #0
+				STA stack,X
+				LDA #1762
+				SUB #12
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				CLEAR X
+				ADDR A,X
+				LDA stack,X
+				COMPR T,A
+				JLT I0
+				JGT I0
 				CLEAR X
 				CLEAR T
 				LDA #1747
