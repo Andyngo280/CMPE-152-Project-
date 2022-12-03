@@ -1,0 +1,22 @@
+program Test;
+const
+	great = 30;
+	quantity = 20;
+type
+	arr = array [1..20] of array [2..30] of integer;
+	time = boolean;
+var
+	alpha, beta, gamma, omega : integer;
+	phi : arr;
+	over: boolean;
+
+begin
+	over := true;
+	beta := 4;
+	alpha := 4;
+
+	if(over = false) then
+		beta := 3
+	else
+		beta := 2;
+end.

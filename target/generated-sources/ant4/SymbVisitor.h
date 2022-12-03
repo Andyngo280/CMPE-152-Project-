@@ -664,6 +664,8 @@ public:
       string type = node->type->getElemType();
       node = stack.getEntry(type);
       type = node->type->getElemType();
+      ctx->entry = node;
+
       if(type == "integer") return 1;
       else if(type == "char") return 2;
       else if(type == "boolean") return 3;

@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\target",
     "\\target\\generated-sources",
     "\\target\\generated-sources\\ant4"
   ],
-  "SelectedNode": "\\assign_test.asm",
+  "SelectedNode": "\\README.txt",
   "PreviewInSolutionExplorer": false
 }
