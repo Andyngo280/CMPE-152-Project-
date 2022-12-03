@@ -21,4 +21,7 @@ begin
 
 	while(beta > 6) do 
 		beta := beta - 1;
+
+	for omega := 1 to 5 do
+		beta := beta + 1;
 end.

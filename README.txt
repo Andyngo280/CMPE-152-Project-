@@ -9,7 +9,7 @@ Afterwards, can just run the program using either "make" or
 
 Need to run this in a place where you have antlr4-runtime library for this to work
 
-We believe we can generate code for assignment, if, repeat, and while statements
+We believe we can generate code for assignment, if, repeat, for, and while statements
 We stopped and could not finish all the loop statements
 Change the input file in make to access our different test-cases
 You can manually change where to output the generated code by editing the open statement in target, codeVisitor, line 61

@@ -499,8 +499,50 @@ public:
         return visitChildren(ctx);
     }
 
-    virtual antlrcpp::Any visitFor_statement(ExprParser::For_statementContext* ctx) override {
-        return visitChildren(ctx);
+    virtual antlrcpp::Any visitFor_statement(ExprParser::For_statementContext* ctx) override 
+    {
+        int i = local_jump;
+        int o1 = 0;
+
+        for (int y = 0; y < rtFrame.size(); y++)
+        {
+            if (ctx->IDENTIFIER()->getText() == rtFrame[y].name)
+            {
+                o1 = stoi(rtFrame[y].value);
+            }
+        }
+
+        output << "\t\t\t\tLDT #" << ctx->INTEGER(0)->getText() << endl;
+        output << "\t\t\t\tLDA #" << 
+            stoi(rtFrame[rtFrame.size() - 1].value) + 9 << endl;
+        output << "\t\t\t\tSUB #" << 9 + o1 << endl;
+        output << "\t\t\t\tCLEAR X" << endl;
+        output << "\t\t\t\tADDR A,X" << endl;
+        output << "\t\t\t\tSTT stack,X" << endl;        //load value to variable
+
+        output << "F" << i;
+        visitStatement(ctx->statement());
+
+        output << "\t\t\t\tLDA #" << 
+            stoi(rtFrame[rtFrame.size() - 1].value) + 9 << endl;
+        output << "\t\t\t\tSUB #" << 9 + o1 << endl;
+        output << "\t\t\t\tCLEAR X" << endl;
+        output << "\t\t\t\tADDR A,X" << endl;
+        output << "\t\t\t\tLDA stack,X" << endl;        
+        output << "\t\t\t\tADD #1" << endl;             //increment variable
+        output << "\t\t\t\tSTA stack,X" << endl;
+
+        output << "\t\t\t\tLDT #" << ctx->INTEGER(1)->getText() << endl;
+        output << "\t\t\t\tLDA #" << 
+            stoi(rtFrame[rtFrame.size() - 1].value) + 9 << endl;
+        output << "\t\t\t\tSUB #" << 9 + o1 << endl;
+        output << "\t\t\t\tCLEAR X" << endl;
+        output << "\t\t\t\tADDR A,X" << endl;
+        output << "\t\t\t\tLDA stack,X" << endl;
+        output << "\t\t\t\tCOMPR A,T" << endl;          //check if equal to limit
+        output << instructTabs << "JLT F" << i << endl;
+
+        return 0;
     }
 
     virtual antlrcpp::Any visitExpression(ExprParser::ExpressionContext* ctx) override
