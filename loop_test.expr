@@ -18,4 +18,7 @@ begin
 		alpha := alpha - 1;
 		beta := beta * 2;
 	UNTIL alpha = 0;
+
+	while(beta > 6) do 
+		beta := beta - 1;
 end.

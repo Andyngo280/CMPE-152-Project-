@@ -12,8 +12,6 @@ test			START	0
 				ADDR A,X
 				LDA #1
 				STA stack,X
-
-
 				LDA stackindex
 				ADD #3
 				STA stackindex
@@ -33,7 +31,6 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-
 				LDA stackindex
 				ADD #3
 				STA stackindex
@@ -78,7 +75,6 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-
 				LDA stackindex
 				ADD #3
 				STA stackindex
@@ -114,7 +110,6 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-
 				LDA stackindex
 				ADD #3
 				STA stackindex
@@ -169,7 +164,6 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-
 				LDA #1762
 				SUB #12
 				CLEAR X
@@ -180,12 +174,6 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
-
-				CLEAR X
-				CLEAR T
-				LDA #1747
-				ADDR A,X
-				LDT stack,X
 stack			RESB 10000
 stackindex		WORD 0
 stackmax		WORD 10000

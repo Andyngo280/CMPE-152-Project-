@@ -58,7 +58,7 @@ public:
 
     virtual antlrcpp::Any visitProgram(ExprParser::ProgramContext* ctx) override
     {
-        output.open("loop_test.asm");
+        output.open("assign_test.asm");
 
         labels = 1;
         output << "test\t\t\tSTART\t0" << endl;
@@ -468,8 +468,18 @@ public:
         return 0;
     }
 
-    virtual antlrcpp::Any visitWhile_statement(ExprParser::While_statementContext* ctx) override {
-        return visitChildren(ctx);
+    virtual antlrcpp::Any visitWhile_statement(ExprParser::While_statementContext* ctx) override 
+    {
+        output << "W" << local_jump;
+        visitExpression(ctx->expression());
+
+        visitStatement(ctx->statement());
+
+        output << instructTabs << "J W" << local_jump << endl;
+        output << "I" << local_jump;
+        local_jump++;
+
+        return 0;
     }
 
     virtual antlrcpp::Any visitCase_statement(ExprParser::Case_statementContext* ctx) override {

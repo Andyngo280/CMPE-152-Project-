@@ -142,12 +142,65 @@ I0				LDA stackindex
 				COMPR T,A
 				JLT I0
 				JGT I0
+W1				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
 				CLEAR X
-				CLEAR T
-				LDA #1747
+				ADDR A,X
+				LDA #6
+				STA stack,X
+				LDA #1762
+				SUB #15
+				CLEAR X
 				ADDR A,X
 				LDT stack,X
-stack			RESB 10000
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				CLEAR X
+				ADDR A,X
+				LDA stack,X
+				COMPR T,A
+				JEQ I1
+				JLT I1
+				LDA stackindex
+				ADD #3
+				STA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA #1
+				STA stack,X
+				LDA #1762
+				SUB #15
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				LDA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				LDA stack,X
+				SUBR A,T
+				LDA stackindex
+				SUB #3
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+				LDA stackindex
+				SUB #3
+				STA stackindex
+				CLEAR X
+				ADDR A,X
+				LDT stack,X
+				LDA #1762
+				SUB #15
+				CLEAR X
+				ADDR A,X
+				STT stack,X
+				J W1
+I1stack			RESB 10000
 stackindex		WORD 0
 stackmax		WORD 10000
 returnvalue		RESB 500
