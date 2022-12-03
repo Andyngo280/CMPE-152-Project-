@@ -174,6 +174,8 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
+				CLEAR X
+				CLEAR T
 stack			RESB 10000
 stackindex		WORD 0
 stackmax		WORD 10000

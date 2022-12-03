@@ -75,7 +75,7 @@ test			START	0
 				SUB #1
 				CLEAR X
 				ADDR A,X
-				LDA #0
+				LDA #1
 				STA stack,X
 				LDA #1762
 				SUB #1762
@@ -110,6 +110,7 @@ test			START	0
 				CLEAR X
 				ADDR A,X
 				STT stack,X
+				J O0
 I0				LDA stackindex
 				ADD #3
 				STA stackindex
@@ -129,6 +130,8 @@ I0				LDA stackindex
 				CLEAR X
 				ADDR A,X
 				STT stack,X
+O0				CLEAR X
+				CLEAR T
 stack			RESB 10000
 stackindex		WORD 0
 stackmax		WORD 10000

@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\target\\generated-sources",
+    "\\target\\generated-sources\\ant4"
   ],
-  "SelectedNode": "\\Makefile",
+  "SelectedNode": "\\if_test.asm",
   "PreviewInSolutionExplorer": false
 }

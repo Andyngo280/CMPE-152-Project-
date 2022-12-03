@@ -58,16 +58,17 @@ public:
 
     virtual antlrcpp::Any visitProgram(ExprParser::ProgramContext* ctx) override
     {
-        output.open("assign_test.asm");
+        output.open("loop_test.asm");
 
         labels = 1;
         output << "test\t\t\tSTART\t0" << endl;
         visitChildren(ctx);
         //output << endl;
 
-        /*//checking if a variable holds the correct value
+        
         output << instructTabs << "CLEAR X" << endl;
         output << instructTabs << "CLEAR T" << endl;
+        /*//checking if a variable holds the correct value
         output << instructTabs << "LDA #1747" << endl;    //finding beta: stackindex-offset => 1762-15
         output << instructTabs << "ADDR A,X" << endl;
         output << instructTabs << "LDT stack,X" << endl;*/
@@ -455,28 +456,36 @@ public:
     virtual antlrcpp::Any visitIf_statement(ExprParser::If_statementContext* ctx) override 
     {
         //output << endl;
+        int i = local_jump;
         int x = visitExpression(ctx->expression());
         x = visitStatement(ctx->statement(0));
-        output << "I" << local_jump;
-        local_jump++;
+
+        if(ctx->ELSE() != nullptr) 
+            output << instructTabs << "J O" << i << endl;
+
+        output << "I" << i;
 
         if (ctx->ELSE() != nullptr)
         {
             x = visitStatement(ctx->statement(1));
+            output << "O" << i;
         }
+
+        local_jump++;
 
         return 0;
     }
 
     virtual antlrcpp::Any visitWhile_statement(ExprParser::While_statementContext* ctx) override 
     {
-        output << "W" << local_jump;
+        int i = local_jump;
+        output << "W" << i;
         visitExpression(ctx->expression());
 
         visitStatement(ctx->statement());
 
-        output << instructTabs << "J W" << local_jump << endl;
-        output << "I" << local_jump;
+        output << instructTabs << "J W" << i << endl;
+        output << "I" << i;
         local_jump++;
 
         return 0;

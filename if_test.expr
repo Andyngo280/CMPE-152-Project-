@@ -15,7 +15,7 @@ begin
 	beta := 4;
 	alpha := 4;
 
-	if(over = false) then
+	if(over = true) then
 		beta := 3
 	else
 		beta := 2;

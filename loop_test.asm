@@ -200,7 +200,9 @@ W1				LDA stackindex
 				ADDR A,X
 				STT stack,X
 				J W1
-I1stack			RESB 10000
+I1				CLEAR X
+				CLEAR T
+stack			RESB 10000
 stackindex		WORD 0
 stackmax		WORD 10000
 returnvalue		RESB 500
